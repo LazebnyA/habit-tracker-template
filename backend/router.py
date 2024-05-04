@@ -2,15 +2,15 @@ from typing import Annotated
 
 from fastapi import Depends, APIRouter
 
-from schemas import Goal
+from schemas import Goal, User
 
 router = APIRouter(
-    prefix="/goals",
+    prefix="",
     tags=["Goals"]
 )
 
 
-@router.get("/")
+@router.get("/goals")
 async def get_goals() -> list[Goal]:
     goals = [
         {"id": 0, "name": "lose weight"},
@@ -20,3 +20,9 @@ async def get_goals() -> list[Goal]:
     ]
 
     return goals
+
+
+@router.post("/user/register")
+async def register_user(user: User):
+    return user
+
