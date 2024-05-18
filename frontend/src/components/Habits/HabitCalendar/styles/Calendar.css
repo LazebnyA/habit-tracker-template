@@ -1,0 +1,71 @@
+* {
+  transition: 0.3s;
+}
+
+.calendar {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.calendar-header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.calendarNav button {
+  border-radius: 2px;
+  padding: 10px 15px;
+}
+
+.calendarNav button:last-child {
+  margin-left: 10px; /* Adjust the margin-left value as needed */
+}
+
+.calendar-header h2 {
+  margin: 0 0 10px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar-day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.calendar-day.tracked {
+  background-color: #007bff; /* Blue background color for tracked dates */
+  color: white;
+}
+
+.calendar-day:hover {
+  background-color: #f0f0f0;
+  color: black;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

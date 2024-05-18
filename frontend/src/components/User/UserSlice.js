@@ -1,9 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios";
 
+const userInfoString = localStorage.getItem("user_info");
+const currentUserInfo = userInfoString ? JSON.parse(userInfoString) : null
+
 const initUserState = {
-    loggedInUser: null,
+    loggedInUser: currentUserInfo,
     registerState: {loading: "idle", error: null, currentRequestID: undefined},
+    signinState: {loading: "idle", error: null, currentRequestID: undefined},
 };
 
 export const registerUser = createAsyncThunk("user/register", async (userInfo, thunkAPI) => {
@@ -14,19 +18,57 @@ export const registerUser = createAsyncThunk("user/register", async (userInfo, t
     }
 
     try {
-        const response = await axios.post("http://127.0.0.1:8000/user/register", userInfo)
-        return response.data
+        const { firstName, lastName, email, password, passwordConfirm } = userInfo;
+        const url = `http://127.0.0.1:8000/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
+
+        const response = await axios.post(url, '', {
+          headers: {
+            'accept': 'application/json'
+          }
+        });
+        localStorage.setItem("user_info", JSON.stringify(response.data));
+        return response.data;
     } catch (error) {
         const {rejectWithValue} = thunkAPI;
-        return rejectWithValue(error.response.data)
+        console.log(rejectWithValue(error.response.data));
+        return rejectWithValue(error.response.data);
     }
-})
+});
+
+
+export const signinUser = createAsyncThunk("user/signin", async (userInfo, thunkAPI) => {
+    const { email, password } = userInfo;
+    const {loading, currentRequestID} = thunkAPI.getState().user.signinState;
+    if (loading !== "pending" || thunkAPI.requestId !== currentRequestID) {
+        return
+    }
+
+    try {
+        const url = `http://127.0.0.1:8000/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+
+        const response = await axios.post(url, '', {
+          headers: {
+            'accept': 'application/json'
+          }
+        });
+        localStorage.setItem("user_info", JSON.stringify(response.data));
+        return response.data;
+    } catch (error) {
+        const {rejectWithValue} = thunkAPI;
+        console.log(rejectWithValue(error.response.data));
+        return rejectWithValue(error.response.data);
+    }
+});
+
 
 const userSlice = createSlice({
     name: "user",
     initialState: initUserState,
     reducers: {
-
+        logoutUser: (state) => {
+            state.loggedInUser = null;
+            localStorage.removeItem("user_info");
+        }
     },
     extraReducers: {
         [registerUser.pending]: (state, action) => {
@@ -52,8 +94,33 @@ const userSlice = createSlice({
                 registerState.currentRequestID = undefined
                 registerState.error = action.payload
             }
+        },
+        [signinUser.pending]: (state, action) => {
+            const {signinState} = state
+            if (signinState.loading === "idle") {
+                signinState.loading = "pending"
+                signinState.currentRequestID = action.meta.requestId
+            }
+        },
+        [signinUser.fulfilled]: (state, action) => {
+            const {signinState} = state
+            if (signinState.loading === "pending") {
+                signinState.loading = "idle"
+                signinState.currentRequestID = undefined
+                signinState.error = null
+                state.loggedInUser = action.payload
+            }
+        },
+        [signinUser.rejected]: (state, action) => {
+            const {signinState} = state
+            if (signinState.loading === "pending") {
+                signinState.loading = "idle"
+                signinState.currentRequestID = undefined
+                signinState.error = action.payload
+            }
         }
     }
 });
 
+export const {logoutUser} = userSlice.actions;
 export default userSlice.reducer;

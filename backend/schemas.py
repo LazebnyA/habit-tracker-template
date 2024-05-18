@@ -7,7 +7,7 @@ class Goal(BaseModel):
     name: str
 
 
-class User(BaseModel):
+class UserRegScheme(BaseModel):
     firstName: str = Field(..., min_length=1)
     lastName: str = Field(..., min_length=1)
     email: EmailStr | None = Field(default=None)
@@ -23,3 +23,28 @@ class User(BaseModel):
         return self.passwordConfirm
 
 
+class UserSignInScheme(BaseModel):
+    email: EmailStr | None = Field(default=None)
+    password: str = Field(..., min_length=5)
+
+
+class UserOrmScheme(BaseModel):
+    firstName: str
+    lastName: str
+    email: EmailStr
+    password: str
+
+
+class UserEmail(BaseModel):
+    email: EmailStr
+
+
+class GoalID(BaseModel):
+    id: int
+
+class HabitName(BaseModel):
+    name: str
+
+
+class GoalOrmScheme(BaseModel):
+    name: str

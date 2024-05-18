@@ -1,16 +1,20 @@
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import {useDispatch, useSelector} from "react-redux";
-import { getGoals } from './GoalsSlice';
+import {getGoals, setSelectedGoal} from './GoalsSlice';
+import AddGoalButton from "./AddGoalButton";
+import UpdateGoalButton from "./UpdateGoalButton";
+import DeleteGoalButton from "./DeleteGoalButton";
 
 const GoalsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    margin-right: 45px;
+    padding-right: 20px;
 `
 const GoalsHeader = styled.div`
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-bottom: 45px;
 `
 const TitleSection = styled.div`
@@ -19,15 +23,7 @@ const TitleSection = styled.div`
     font-size: 30px;
 `
 
-const AddGoalButton = styled.div`
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    img {
-        max-width: 16px;
-        margin-right: 8px;
-    }
-`
+
 
 const GoalRow = styled.div`
     display: flex;
@@ -42,6 +38,7 @@ const GoalRow = styled.div`
 
 const Name = styled.div`
     text-transform: uppercase;
+    cursor: pointer;
 `
 
 const Action = styled.div`
@@ -51,9 +48,6 @@ const Action = styled.div`
     img {
         max-width: 20px;
         margin-right: 8px;
-        :last-child {
-            margin: 0;
-        }
     }
 `
 
@@ -61,11 +55,20 @@ const Goals = () => {
     const dispatch = useDispatch()
 
     const goalState = useSelector(state => state.goals);
-    const {goalsList, loading, error} = goalState;
+    const {goalsList, selectedGoal, loading, error} = goalState;
+
+    const userState = useSelector(state => state.user);
+    const {loggedInUser} = userState;
 
     useEffect(() => {
-        dispatch(getGoals())
-    }, [dispatch])
+        if (loggedInUser) {
+            dispatch(getGoals(loggedInUser))
+        }
+    }, [loggedInUser, dispatch])
+
+    const handleGoalClick = (goal) => {
+        dispatch(setSelectedGoal(goal));
+    };
 
     return (
         <GoalsContainer>
@@ -74,13 +77,19 @@ const Goals = () => {
                 <>
                     <GoalsHeader>
                         <TitleSection>goals</TitleSection>
-                        <AddGoalButton><img src="images/add.png" alt="add-goal-btn"/>add a goal</AddGoalButton>
+                        <AddGoalButton />
                     </GoalsHeader>
-                    {goalsList && goalsList.map((goal, index) => (
-                            <GoalRow key={`goal-number-${index}`}>
-                                <Name>{goal.name}</Name>
-                                <Action><img src="images/edit.png" alt=""/> <img src="images/delete.png" alt=""/></Action>
-                            </GoalRow>
+                    {goalsList && [...goalsList].sort((a, b) => a.id - b.id).map((goal, index) => (
+                        <GoalRow key={`goal-number-${index}`}>
+                            {selectedGoal && selectedGoal.id === goal.id ?
+                                <Name style={{color: "cornflowerblue", transition: "0.3s"}} onClick={() => handleGoalClick(goal)}>{goal.name}</Name> :
+                                <Name onClick={() => handleGoalClick(goal)}>{goal.name}</Name>
+                            }
+                            <Action>
+                                <UpdateGoalButton goalID={goal.id}/>
+                                <DeleteGoalButton goalID={goal.id} goalName={goal.name}/>
+                            </Action>
+                        </GoalRow>
                     ))}
                 </>
             )}

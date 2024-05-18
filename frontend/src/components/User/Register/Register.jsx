@@ -13,7 +13,11 @@ const PageContainer = styled.div`
 const PageTitle = styled.div`
     font-size: 30px;
     padding-bottom: 10px;
-    padding-left: 100px;
+    padding-top: 25px;
+    padding-left: 50px;
+    font-family: "Silkscreen", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 `;
 
 const RegisterContainer = styled.div`
@@ -43,7 +47,7 @@ const InputSection = styled.div`
         padding: 5px;
         border: 2px solid #e3e3e3;
         :focus {
-            outline: 2px solid #9da631;
+            outline: 2px solid cornflowerblue;;
             border: none;
         }
     }
@@ -56,7 +60,7 @@ const ButtonContainer = styled.div`
 `;
 
 const SubmitButton = styled.div`
-    background-color: #9da631;
+    background-color: cornflowerblue;;
     border: none;
     border-radius: 2px;
     padding: 8px 10px 8px 10px;
@@ -72,7 +76,7 @@ const SubmitButton = styled.div`
 
 const StyledLink = styled(Link)`
     text-decoration: none;
-    color: #9da631;
+    color: cornflowerblue;;
     font-weight: bold;
 `
 
@@ -100,12 +104,12 @@ const Register = () => {
             ...prevState,
             [id]: value,
         }));
-        console.log(userInfo);
     };
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const handleSubmit = () => {
+        console.log(userInfo);
         dispatch(registerUser(userInfo));
     };
 
@@ -115,11 +119,11 @@ const Register = () => {
         if (loggedInUser) {
             navigate('/habits')
         }
-    }, [loggedInUser])
+    }, [navigate, loggedInUser])
 
     return (
         <PageContainer>
-            <PageTitle>Consistency</PageTitle>
+            <PageTitle>Evolve</PageTitle>
             <RegisterContainer>
                 <FormTitle>Register</FormTitle>
                 <FormContainer>
@@ -128,7 +132,7 @@ const Register = () => {
                         {error && error.detail && error.detail.find(err => err.loc[1] === "firstName") && (
                             <ErrorSection>{error.detail.find(err => err.loc[1] === "firstName").msg}</ErrorSection>) }
                         <input type={"text"} id={"firstName"} placeholder={"First Name"}
-                               onChange={handleUserInfoChange} maxLength={60}/>
+                               onChange={handleUserInfoChange} maxLength={100}/>
                     </InputSection>
                     <InputSection>
                         <label htmlFor="lastName">Last Name</label>
@@ -148,7 +152,7 @@ const Register = () => {
                         <label htmlFor="password">Password</label>
                         {error && error.detail && error.detail.find(err => err.loc[1] === "password") && (
                             <ErrorSection>{error.detail.find(err => err.loc[1] === "password").msg}</ErrorSection>) }
-                        <input type={"text"} id={"password"} placeholder={"Password"}
+                        <input type={"password"} id={"password"} placeholder={"Password"}
                                onChange={handleUserInfoChange} maxLength={128}/>
                     </InputSection>
                     <InputSection>

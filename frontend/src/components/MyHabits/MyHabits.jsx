@@ -1,6 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import MyHabitsDesktop from './MyHabitsDesktop';
+import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 
 
@@ -17,6 +19,17 @@ const MobileContainer = styled.div`
 `
 
 const MyHabits = () => {
+    const userState = useSelector(state => state.user)
+    const {loggedInUser} = userState
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loggedInUser) {
+            navigate('/signin')
+        }
+    }, [navigate, loggedInUser])
+
     return (
         <>
 
