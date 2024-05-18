@@ -1,21 +1,23 @@
 import './Welcome.css';
 import {Link} from "react-router-dom";
+import React from "react";
 
 const Welcome = () => {
     return (
         <>
-            <nav>
+            <nav id="welcomeNav">
                 <div className="navContainer">
                     <h1>Evolve</h1>
                     <ul>
-                        <li><Link className={"navButton"} to={"/Signin"}>Login</Link></li>
-                        <li><Link className={"navButton"} to={"/Register"}>Register</Link></li>
+                        <li><Link className="navButton" to="/news">News</Link></li>
+                        <li><Link className="navButton" to="/Signin">Login</Link></li>
+                        <li><Link className="navButton" to="/Register">Register</Link></li>
                     </ul>
                 </div>
             </nav>
 
 
-            <header>
+            <header id="welcomeHeader">
                 <div className="container">
                     <div className="heading">
                         <h1>Evolve</h1>
