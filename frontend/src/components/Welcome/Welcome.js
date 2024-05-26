@@ -2,6 +2,10 @@ import './Welcome.css';
 import {Link} from "react-router-dom";
 import React from "react";
 
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 const Welcome = () => {
     return (
         <>
@@ -63,14 +67,10 @@ const Welcome = () => {
                                     as you progress.
                                 </p>
                             </div>
-                            <div className="featureDecoration featureDecorItem1">
-
-                            </div>
+                            <img src="/images/mountainBg2.png" className="featureDecoration featureDecorItem1"  alt={""}/>
                         </div>
                         <div className="featureItem feature2">
-                            <div className="featureDecoration featureDecorItem2">
-
-                            </div>
+                            <img src="/images/placeholder2.png" className="featureDecoration featureDecorItem2" alt={""}/>
                             <div className="featureText">
                                 <h3 className="featureHeading">
                                     Revolutionizing Life one Habit at a Time
@@ -99,8 +99,8 @@ const Welcome = () => {
                             </li>
                         </ol>
                         <p>You can find a more detailed guide for using the application <Link
-                            to="/UserGuide">here</Link>.</p>
-                        <Link className="navButton" to="/Register">Get Started</Link>
+                            to="/userGuide" onClick={scrollToTop}>here</Link>.</p>
+                        <Link className="navButton"  to="/Register">Get Started</Link>
                     </div>
                 </section>
             </main>

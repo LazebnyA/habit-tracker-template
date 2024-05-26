@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import { Modal } from 'react-responsive-modal';
-import {useDispatch, useSelector} from "react-redux";
-import {addHabit} from "./HabitsSlice";
-
+import 'react-responsive-modal/styles.css';
+import { useDispatch, useSelector } from "react-redux";
+import { addHabit } from "./HabitsSlice";
 
 const InnerAddHabitButton = styled.div`
     margin: auto 0;
@@ -25,36 +25,36 @@ const InnerAddHabitButton = styled.div`
         font-size: 25px;
         margin-right: 12px;
     }
-`
+`;
 
 const ModalContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 375px;
-`
+`;
 
 const ModalTitle = styled.div`
     font-size: 30px;
     margin-bottom: 20px;
-`
+`;
 
 const InputSection = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
     label {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
     input {
         padding: 5px;
-        border: 2px solid #e3e3e3;
-        :focus {
-            outline: 2px solid cornflowerblue;
+        border: 1px solid #e3e3e3;
+        &:focus {
+            outline: 1px solid cornflowerblue;
+            border-radius: 3px;
             border: none;
         }
     }
 `;
-
 
 const ButtonContainer = styled.div`
     display: flex;
@@ -62,7 +62,7 @@ const ButtonContainer = styled.div`
     margin-bottom: 15px;
 `;
 
-const SubmitButton = styled.div`
+const SubmitButton = styled.button`
     background-color: cornflowerblue;
     border: none;
     border-radius: 2px;
@@ -70,59 +70,80 @@ const SubmitButton = styled.div`
     color: white;
     font-family: inherit;
     font-size: inherit;
-    :focus {
+    cursor: pointer;
+    opacity: ${(props) => (props.disabled ? 0.7 : 1)};
+    pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
+
+    &:focus {
         outline: none;
         border: none;
     }
-    cursor: pointer;
+`;
+
+const customModalStyles = `
+    .custom-modal .react-responsive-modal-closeButton {
+        transition: none;
+    }
+    .custom-modal .react-responsive-modal-closeButton:hover {
+        background-color: transparent !important;
+    }
 `;
 
 const AddHabitButton = () => {
     const goalsState = useSelector(state => state.goals);
-    const currentDate = useSelector(state => state.habits.currentDate)
-    const {selectedGoal} = goalsState;
+    const currentDate = useSelector(state => state.habits.currentDate);
+    const { selectedGoal } = goalsState;
 
-     const [showModal, setShowModal] = useState(false);
-     const openModal = () => setShowModal(true);
-     const closeModal = () => setShowModal(false);
+    const [showModal, setShowModal] = useState(false);
+    const [habitName, setHabitName] = useState("");
 
-     const [habitName, setHabitName] = useState("")
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
 
-     const handleHabitChange = (e) => {
+    const handleHabitChange = (e) => {
         setHabitName(e.target.value);
-     }
+    };
 
-     const dispatch = useDispatch()
-     const handleSubmit = () => {
-         const payload = {goalID: selectedGoal.id, habitName: habitName, currentDate: currentDate};
-         dispatch(addHabit(payload));
-         closeModal();
-     }
+    const dispatch = useDispatch();
+    const handleSubmit = () => {
+        const payload = { goalID: selectedGoal.id, habitName: habitName, currentDate: currentDate };
+        dispatch(addHabit(payload));
+        closeModal();
+    };
 
-     return (
+    return (
         <>
-
+            <style>{customModalStyles}</style>
             <InnerAddHabitButton onClick={openModal}>
                 <b>+</b> add a habit
             </InnerAddHabitButton>
-            <Modal open={showModal} onClose={closeModal} center >
+            <Modal
+                open={showModal}
+                onClose={closeModal}
+                center
+                classNames={{ modal: 'custom-modal' }}
+            >
                 <ModalContentContainer>
                     <ModalTitle>Create a New Habit</ModalTitle>
                     <InputSection>
                         <label htmlFor="createHabit">Enter a Habit Name</label>
-                        <input type={"text"} id={"createHabit"} placeholder={"Habit Name"}
-                               onChange={handleHabitChange} maxLength={50}/>
+                        <input
+                            type="text"
+                            id="createHabit"
+                            placeholder="Habit Name"
+                            onChange={handleHabitChange}
+                            maxLength={50}
+                        />
                     </InputSection>
                     <ButtonContainer>
-                        <SubmitButton type={"submit"} onClick={handleSubmit}>
+                        <SubmitButton type="submit" onClick={handleSubmit} disabled={habitName.length === 0}>
                             Add Habit
                         </SubmitButton>
                     </ButtonContainer>
                 </ModalContentContainer>
             </Modal>
-
         </>
-    )
-}
+    );
+};
 
 export default AddHabitButton;

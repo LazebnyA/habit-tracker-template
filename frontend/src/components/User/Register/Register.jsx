@@ -10,7 +10,10 @@ const PageContainer = styled.div`
     padding-top: 10px;
 `;
 
-const PageTitle = styled.div`
+const PageTitle = styled(Link)`
+    cursor: pointer;
+    text-decoration: none;
+    color: #3D5A80;
     font-size: 30px;
     padding-bottom: 10px;
     padding-top: 25px;
@@ -123,7 +126,7 @@ const Register = () => {
 
     return (
         <PageContainer>
-            <PageTitle>Evolve</PageTitle>
+            <PageTitle to="/">Evolve</PageTitle>
             <RegisterContainer>
                 <FormTitle>Register</FormTitle>
                 <FormContainer>

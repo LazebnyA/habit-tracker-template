@@ -70,55 +70,43 @@ const userSlice = createSlice({
             localStorage.removeItem("user_info");
         }
     },
-    extraReducers: {
-        [registerUser.pending]: (state, action) => {
+    extraReducers: (builder) => {
+        builder
+          .addCase(registerUser.pending, (state, action) => {
             const {registerState} = state
-            if (registerState.loading === "idle") {
-                registerState.loading = "pending"
-                registerState.currentRequestID = action.meta.requestId
-            }
-        },
-        [registerUser.fulfilled]: (state, action) => {
+            registerState.loading = "pending"
+            registerState.currentRequestID = action.meta.requestId
+          })
+          .addCase(registerUser.fulfilled, (state, action) => {
             const {registerState} = state
-            if (registerState.loading === "pending") {
-                registerState.loading = "idle"
-                registerState.currentRequestID = undefined
-                registerState.error = null
-                state.loggedInUser = action.payload
-            }
-        },
-        [registerUser.rejected]: (state, action) => {
+            registerState.currentRequestID = undefined
+            registerState.error = null
+            state.loggedInUser = action.payload
+          })
+          .addCase(registerUser.rejected, (state, action) => {
             const {registerState} = state
-            if (registerState.loading === "pending") {
-                registerState.loading = "idle"
-                registerState.currentRequestID = undefined
-                registerState.error = action.payload
-            }
-        },
-        [signinUser.pending]: (state, action) => {
-            const {signinState} = state
-            if (signinState.loading === "idle") {
-                signinState.loading = "pending"
-                signinState.currentRequestID = action.meta.requestId
-            }
-        },
-        [signinUser.fulfilled]: (state, action) => {
-            const {signinState} = state
-            if (signinState.loading === "pending") {
-                signinState.loading = "idle"
-                signinState.currentRequestID = undefined
-                signinState.error = null
-                state.loggedInUser = action.payload
-            }
-        },
-        [signinUser.rejected]: (state, action) => {
-            const {signinState} = state
-            if (signinState.loading === "pending") {
-                signinState.loading = "idle"
-                signinState.currentRequestID = undefined
-                signinState.error = action.payload
-            }
-        }
+            state.loading = 'idle';
+            registerState.currentRequestID = undefined
+            registerState.error = action.payload
+          })
+          .addCase(signinUser.pending, (state, action) => {
+              const {signinState} = state;
+              signinState.loading = "pending"
+              signinState.currentRequestID = action.meta.requestId
+          })
+        .addCase(signinUser.fulfilled, (state, action) => {
+              const {signinState} = state;
+              signinState.loading = "idle"
+              signinState.currentRequestID = undefined
+              signinState.error = null
+              state.loggedInUser = action.payload
+          })
+        .addCase(signinUser.rejected, (state, action) => {
+              const {signinState} = state;
+              signinState.loading = "idle"
+              signinState.currentRequestID = undefined
+              signinState.error = action.payload
+          })
     }
 });
 

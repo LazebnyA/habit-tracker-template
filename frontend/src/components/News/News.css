@@ -30,6 +30,12 @@
     font-style: normal;
 }
 
+#newsNav h1 a{
+    cursor: pointer;
+    text-decoration: none;
+    color: #3D5A80;
+}
+
 #newsNav ul {
     list-style-type: none;
     display: flex;
@@ -71,9 +77,11 @@ a.navButton {
     margin: 0 auto;
     padding: 100px 0;
     position: relative;
+    overflow: hidden;
 }
 
 .newsHeading h1 {
+
     font-size: 48px;
     font-family: "Silkscreen", sans-serif;
     font-weight: 400;
@@ -118,6 +126,7 @@ section.news {
 .newsItem p {
     font-size: 18px;
     line-height: 1.6;
+    word-break: break-all;
 }
 
 /* Footer styles */

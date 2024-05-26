@@ -5,7 +5,7 @@ import { Modal } from 'react-responsive-modal';
 import {useDispatch, useSelector} from "react-redux";
 import {addHabit, deleteHabit, fetchDataForSelectedHabit} from "components/Habits/HabitsSlice";
 import HabitCalendar from "./HabitCalendar";
-
+import 'react-responsive-modal/styles.css';
 
 const InnerAddHabitButton = styled.div`
     margin: auto 0;
@@ -44,6 +44,16 @@ const CalendarSection = styled.div`
     padding: 15px 0;
 `
 
+const customModalStyles = `
+    .custom-modal .react-responsive-modal-closeButton {
+        transition: none;
+    }
+    .custom-modal .react-responsive-modal-closeButton:hover {
+        background-color: transparent !important;
+    }
+`;
+
+
 const HabitCalendarModal = ({habitID}) => {
 
      const [showModal, setShowModal] = useState(false);
@@ -70,10 +80,13 @@ const HabitCalendarModal = ({habitID}) => {
 
              <InnerAddHabitButton>
                  <img onClick={openModal} src="images/calendar.png" alt="calendar-habit-btn"/>
-                 <img onClick={() => handleDeleteHabit(habitID)} src="images/bin.png" alt="delete-habit-btn"/>
-                 <img onClick={() => handleRedactHabit(habitID)} src="images/pencil.png" alt="redact-habit-btn"/>
              </InnerAddHabitButton>
-             <Modal open={showModal} onClose={closeModal} center>
+             <Modal
+                open={showModal}
+                onClose={closeModal}
+                center
+                classNames={{ modal: 'custom-modal' }}
+            >
                  <ModalContentContainer>
                     <ModalTitle>Calendar</ModalTitle>
                     <CalendarSection>

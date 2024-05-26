@@ -9,7 +9,10 @@ const PageContainer = styled.div`
     padding-top: 10px;
 `;
 
-const PageTitle = styled.div`
+const PageTitle = styled(Link)`
+    cursor: pointer;
+    text-decoration: none;
+    color: #3D5A80;
     font-size: 30px;
     padding-bottom: 10px;
     padding-top: 25px;
@@ -119,22 +122,43 @@ const Signin = () => {
 
     return (
         <PageContainer>
-            <PageTitle>Evolve</PageTitle>
+            <PageTitle to="/">Evolve</PageTitle>
             <RegisterContainer>
                 <FormTitle>Sign-In</FormTitle>
                 <FormContainer>
                     <InputSection>
                         <label htmlFor="email">Email</label>
+                        {error && Array.isArray(error.detail) && (
+                          error.detail.filter(item => item.loc[1] === "email")
+                            .map(item => item.msg) // Assuming 'msg' contains the error message
+                            .join(', ') // Join messages with a comma and a space
+                        ) && (
+                          <ErrorSection>
+                            Incorrect email: {error.detail.filter(item => item.loc[1] === "email")
+                              .map(item => item.msg)
+                              .join(', ')}
+                          </ErrorSection>
+                        )}
                         <input type={"email"} id={"email"} placeholder={"Email"}
                                onChange={handleUserInfoChange} maxLength={100}/>
                     </InputSection>
                     <InputSection>
                         <label htmlFor="password">Password</label>
+                        {error && Array.isArray(error.detail) && (
+                          error.detail.filter(item => item.loc[1] === "password")
+                            .map(item => item.msg) // Assuming 'msg' contains the error message
+                            .join(', ') // Join messages with a comma and a space
+                        ) && (
+                          <ErrorSection>
+                            Incorrect password: {error.detail.filter(item => item.loc[1] === "password")
+                              .map(item => item.msg)
+                              .join(', ')}
+                          </ErrorSection>
+                        )}
                         <input type={"password"} id={"password"} placeholder={"Password"}
                                onChange={handleUserInfoChange} maxLength={128}/>
                     </InputSection>
-                    {error && error.detail && (
-                            <ErrorSection>{error.detail}</ErrorSection>) }
+                    {error && !Array.isArray(error.detail) && <ErrorSection>{error.detail}</ErrorSection>}
                     <ButtonContainer>
                         <SubmitButton type={"submit"} onClick={handleSubmit}>
                             Sign In

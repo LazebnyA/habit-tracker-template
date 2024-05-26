@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers.habits_router import router as habits_router
 from routers.goals_router import router as goals_router
 from routers.user_router import router as user_router
+from routers.news_router import router as news_router
 
 app = FastAPI()
 
@@ -27,3 +28,4 @@ app.add_middleware(
 app.include_router(goals_router)
 app.include_router(user_router)
 app.include_router(habits_router)
+app.include_router(news_router)

@@ -3,7 +3,8 @@ import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteHabit, fetchDataForSelectedHabit, trackHabit, untrackHabit} from "./HabitsSlice";
 import HabitCalendarModal from "./HabitCalendar/HabitCalendarModal";
-
+import HabitDeleteModal from "./HabitUpdateDelete/HabitDeleteModal";
+import HabitEditModal from "./HabitUpdateDelete/HabitEditModal";
 
 
 const HabitsItem = styled.div`
@@ -62,6 +63,10 @@ const HabitsItem = styled.div`
             }
         }
     }
+    
+    .habitOptions {
+        display: flex;
+    }
 `;
 
 const HabitsList = ({ habitsData }) => {
@@ -97,7 +102,11 @@ const HabitsList = ({ habitsData }) => {
                             <label style={habit.id === selectedHabit ? {color: "cornflowerblue"} : {}}
                                    htmlFor={`habit_name_${index}`}>{habit.name}</label>
                         </div>
-                        <HabitCalendarModal habitID={habit.id}/>
+                        <div className="habitOptions">
+                            <HabitCalendarModal />
+                            <HabitDeleteModal habitID={habit.id} />
+                            <HabitEditModal habitID={habit.id} />
+                        </div>
                     </li>
                 ))}
             </ul>

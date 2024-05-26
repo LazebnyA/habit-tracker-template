@@ -1,31 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import './News.css';
+import './News.css'
+import axios from "axios";
 
 const News = () => {
-    const newsItems = [
-        {
-            title: "Version 1.1 Released",
-            date: "May 20, 2024",
-            content: "We are excited to announce the release of Evolve version 1.1. This update includes new features like customizable habit reminders, improved analytics, and a refreshed user interface to help you stay on track with your goals."
-        },
-        {
-            title: "Introducing Dark Mode",
-            date: "April 10, 2024",
-            content: "By popular demand, Evolve now supports Dark Mode! Easily switch between light and dark themes to reduce eye strain and save battery life on your devices."
-        },
-        {
-            title: "Enhanced Habit Tracking",
-            date: "March 15, 2024",
-            content: "Our latest update brings enhanced habit tracking capabilities, including detailed progress reports and habit streaks. Keep your momentum going and see how small changes add up over time."
-        }
-    ];
+    const [newsItems, setNewsItems] = useState(null)
+
+    const getNews = async () => {
+        const response = await axios.get(`http://127.0.0.1:8000/news/get`, {
+          headers: {
+              'accept': 'application/json'
+          }
+        })
+        return response.data
+    }
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            const news = await getNews();
+            setNewsItems(news);
+        };
+
+        fetchNews();
+    }, []);
 
     return (
         <>
             <nav id="newsNav">
                 <div className="navContainer">
-                    <h1>Evolve</h1>
+                    <h1><Link to="/">Evolve</Link></h1>
                     <ul>
                         <li><Link className="navButton" to="/">Home</Link></li>
                         <li><Link className="navButton" to="/Signin">Login</Link></li>
@@ -46,10 +49,10 @@ const News = () => {
             <main>
                 <section className="news">
                     <div className="newsContainer">
-                        {newsItems.map((item, index) => (
+                        {newsItems && newsItems.map((item, index) => (
                             <div className="newsItem" key={index}>
                                 <h2>{item.title}</h2>
-                                <p className="date">{item.date}</p>
+                                <p className="date">{item.created_date}</p>
                                 <p>{item.content}</p>
                             </div>
                         ))}

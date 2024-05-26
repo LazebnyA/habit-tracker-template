@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import HabitsList from "./HabitsList";
 import {useDispatch, useSelector} from "react-redux";
@@ -7,9 +7,10 @@ import AddHabitButton from "./AddHabitButton";
 import HabitsNav from "./HabitsNav";
 
 const HabitsContainer = styled.div`
+    height: 100%;
     display: flex;
+    padding-top: 50px;
     flex-direction: column;
-    margin-top: 100px;
 `;
 
 const HabitsHeader = styled.div`
@@ -35,7 +36,7 @@ const DateLabel = styled.div`
 `
 
 const HabitsBody = styled.div`
-    max-height: 300px;
+    max-height: 60vh;
     overflow-y: auto;
 `
 

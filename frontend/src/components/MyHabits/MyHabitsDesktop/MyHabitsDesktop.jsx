@@ -5,6 +5,8 @@ import {logoutUser} from "components/User/UserSlice";
 import {useDispatch, useSelector} from "react-redux";
 import Habits from "../../Habits/Habits";
 import {Link} from "react-router-dom";
+import SetGeolocation from "../../Weather/SetGeolocation";
+import Weather from "../../Weather/Weather";
 
 
 const GridContainer = styled.div`
@@ -32,13 +34,24 @@ const Delimiter = styled.div`
     height: 100%; 
 `
 
+const MainWrapper = styled.div`
+    overflow: none;
+`
+
 const MainContainer = styled.div`
     padding-top: 10px;
     padding-right: 50px;
     padding-left: 50px;
+    flex-grow: 1;
+    overflow-y: auto; 
+`;
+
+const DecorContainer = styled.div` 
+    height: 100%;
+    width: 100%;
     background-image: url("/images/mountainBg.png");
-    background-size: 100%;
-    background-position: bottom; 
+    background-position: center;
+    background-size: 180%; 
     background-repeat: no-repeat;
 `;
 
@@ -94,25 +107,30 @@ const MyHabitsDesktop = () => {
                 <Goals />
             </NavContainer>
             <Delimiter></Delimiter>
-            <MainContainer>
-                <HeaderContainer>
-                    <HeaderItem>Hi, {loggedInUser && loggedInUser.firstName}</HeaderItem>
-                    <HeaderItem>
-                        <Link to={"/"}>
-                            <SignoutButton>Feedback</SignoutButton>
-                        </Link>
+            <MainWrapper>
+                <MainContainer>
+                    <HeaderContainer>
+                        <HeaderItem>Hi, {loggedInUser && loggedInUser.firstName}</HeaderItem>
+                        <HeaderItem>
+                            <Link to={"/"}>
+                                <SignoutButton>Home</SignoutButton>
+                            </Link>
 
-                    </HeaderItem>
-                    <HeaderItem>
-                        {loggedInUser && (
-                            <SignoutButton onClick={() => handleLogout()}>
-                                Sign-out
-                            </SignoutButton>
-                        )}
-                    </HeaderItem>
-                </HeaderContainer>
-                <Habits />
-            </MainContainer>
+                        </HeaderItem>
+                        <HeaderItem>
+                            {loggedInUser && (
+                                <SignoutButton onClick={() => handleLogout()}>
+                                    Sign-out
+                                </SignoutButton>
+                            )}
+                        </HeaderItem>
+                    </HeaderContainer>
+                    <SetGeolocation />
+                    <Weather />
+                    <Habits />
+                </MainContainer>
+                <DecorContainer />
+            </MainWrapper>
         </GridContainer>
     )
 }

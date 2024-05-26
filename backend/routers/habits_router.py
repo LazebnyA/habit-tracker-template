@@ -13,10 +13,14 @@ router = APIRouter(
 
 
 @router.get("/get")
-async def get_goals(goal_id: Annotated[GoalID, Depends()]):
+async def get_habits(goal_id: Annotated[GoalID, Depends()]):
     habits_list = await HabitsRepository.get_habits(goal_id)
     return habits_list
 
+@router.get("/get/{habit_id}")
+async def get_habit(habit_id: int):
+    habits_list = await HabitsRepository.get_habit(habit_id)
+    return habits_list
 
 @router.post("/create")
 async def add_habit(goal_id: Annotated[GoalID, Depends()], habit_name: Annotated[HabitName, Depends()]):

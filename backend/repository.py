@@ -8,9 +8,9 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from starlette import status
 
 from config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
-from models.database import User, Goal, Habit, HabitTrack
+from models.database import User, Goal, Habit, HabitTrack, NewsPost
 
-from schemas import UserRegScheme, UserOrmScheme, UserSignInScheme, GoalOrmScheme, UserEmail, GoalID
+from schemas import UserRegScheme, UserOrmScheme, UserSignInScheme, GoalOrmScheme, UserEmail, GoalID, NewsScheme
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -133,6 +133,15 @@ class HabitsRepository:
             return habits
 
     @classmethod
+    async def get_habit(cls, habit_id: int):
+        async with new_session() as session:
+            fetch_habits = select(Habit).where(Habit.id == habit_id)
+            result = await session.execute(fetch_habits)
+            habits = result.scalars().one_or_none()
+
+            return habits
+
+    @classmethod
     async def add_habit(cls, goal_id: GoalID, habit_name: str):
         async with new_session() as session:
             habit = Habit(name=habit_name, goalID=goal_id.id)
@@ -251,3 +260,26 @@ class HabitTrackRepository:
             # goal_models = result.scalars().all()
             #
             return habits_ids
+
+
+class NewsRepository:
+    @classmethod
+    async def post_news(cls, post_data: NewsScheme):
+        async with new_session() as session:
+            post = NewsPost(title=post_data.title, content=post_data.content, userID=post_data.user_id)
+
+            session.add(post)
+
+            await session.flush()
+            await session.commit()
+
+            return post
+
+    @classmethod
+    async def get_news(cls):
+        async with new_session() as session:
+            fetch_posts = select(NewsPost)
+            result = await session.execute(fetch_posts)
+            response = result.scalars().all()
+
+            return response

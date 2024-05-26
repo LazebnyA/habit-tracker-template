@@ -11,7 +11,6 @@ export const fetchHabitsByGoal = createAsyncThunk(
                 'accept': 'application/json'
               }
             });
-      console.log(habitsResponse.data)
 
       const checkedHabits = await axios.get(`http://127.0.0.1:8000/habits/trackInfo/${selectedGoalID}&${selectedDate}`, {
               headers: {
@@ -70,11 +69,11 @@ export const deleteHabit = createAsyncThunk('habits/deleteHabit',
     }
 );
 
-export const redactHabit = createAsyncThunk('habits/deleteHabit',
+export const redactHabit = createAsyncThunk('habits/redactHabit',
     async(payload, thunkAPI) => {
         try {
-          const {goalID, habitID, currentDate} = payload;
-          const response = await axios.put(`http://127.0.0.1:8000/habits/update/${habitID}`,{
+          const {goalID, habitID, currentDate, newHabitName} = payload;
+          const response = await axios.put(`http://127.0.0.1:8000/habits/update/${habitID}&${newHabitName}`,{
                   headers: {
                     'accept': 'application/json'
                   }
@@ -198,6 +197,7 @@ const habitsSlice = createSlice({
         state.loading = 'idle';
         state.error = action.payload;
       })
+
   }
 });
 

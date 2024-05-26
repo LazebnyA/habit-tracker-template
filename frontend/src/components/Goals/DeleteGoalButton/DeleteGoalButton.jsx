@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Modal } from 'react-responsive-modal';
 import {useDispatch, useSelector} from "react-redux";
 import {deleteGoal} from "../GoalsSlice";
+import 'react-responsive-modal/styles.css';
+
 
 const InnerDeleteGoalButton = styled.div`
     display: flex;
@@ -29,13 +31,13 @@ const InputSection = styled.div`
     flex-direction: column;
     margin-bottom: 15px;
     label {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
     input {
         padding: 5px;
         border: 2px solid #e3e3e3;
-        :focus {
-            outline: 2px solid cornflowerblue;;
+        &:focus {
+            outline: 1px solid cornflowerblue;
             border: none;
         }
     }
@@ -63,6 +65,16 @@ const SubmitButton = styled.div`
     cursor: pointer;
 `;
 
+const customModalStyles = `
+    .custom-modal .react-responsive-modal-closeButton {
+        transition: none;
+    }
+    .custom-modal .react-responsive-modal-closeButton:hover {
+        background-color: transparent !important;
+    }
+`;
+
+
 
 const DeleteGoalButton = (props) => {
     const userState = useSelector(state => state.user);
@@ -84,7 +96,12 @@ const DeleteGoalButton = (props) => {
             <InnerDeleteGoalButton onClick={openModal}>
                 <img src="images/delete.png" alt="add-goal-btn"/>
             </InnerDeleteGoalButton>
-            <Modal open={showModal} onClose={closeModal} center >
+            <Modal
+                open={showModal}
+                onClose={closeModal}
+                center
+                classNames={{ modal: 'custom-modal' }}
+            >
                 <ModalContentContainer>
                     <ModalTitle>Delete Goal</ModalTitle>
                     <InputSection>

@@ -24,7 +24,7 @@ class UserRegScheme(BaseModel):
 
 
 class UserSignInScheme(BaseModel):
-    email: EmailStr | None = Field(default=None)
+    email: EmailStr | None = Field(default=None, min_length=1)
     password: str = Field(..., min_length=5)
 
 
@@ -42,9 +42,16 @@ class UserEmail(BaseModel):
 class GoalID(BaseModel):
     id: int
 
+
 class HabitName(BaseModel):
     name: str
 
 
 class GoalOrmScheme(BaseModel):
     name: str
+
+
+class NewsScheme(BaseModel):
+    user_id: int
+    title: str
+    content: str

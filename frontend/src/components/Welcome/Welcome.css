@@ -28,6 +28,10 @@ nav h1 {
     font-family: "Silkscreen", sans-serif;
     font-weight: 400;
     font-style: normal;
+    cursor: pointer;
+    text-decoration: none;
+    color: #3D5A80;
+    padding-left: 50px;
 }
 
 nav ul {
@@ -248,11 +252,10 @@ p.featureParagraph {
 }
 
 .featureDecorItem1 {
-    background: url("/public/images/mountainBg2.png") 200% no-repeat;
+
 }
 
 .featureDecorItem2 {
-    background-image: url("/public/images/placeholder2.png");
     border-top-left-radius: 50%;
 }
 /* Guide styles */

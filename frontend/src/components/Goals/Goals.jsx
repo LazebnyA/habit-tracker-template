@@ -36,6 +36,11 @@ const GoalRow = styled.div`
     }
 `
 
+const GoalsList = styled.div`
+    max-height: 60vh;
+    overflow-y: auto;
+`
+
 const Name = styled.div`
     text-transform: uppercase;
     cursor: pointer;
@@ -72,6 +77,7 @@ const Goals = () => {
 
     return (
         <GoalsContainer>
+
             {error && <div>Error fetching goals</div>}
             {loading === "pending" ? (<div>Loading...</div>) : (
                 <>
@@ -79,18 +85,20 @@ const Goals = () => {
                         <TitleSection>goals</TitleSection>
                         <AddGoalButton />
                     </GoalsHeader>
-                    {goalsList && [...goalsList].sort((a, b) => a.id - b.id).map((goal, index) => (
-                        <GoalRow key={`goal-number-${index}`}>
-                            {selectedGoal && selectedGoal.id === goal.id ?
-                                <Name style={{color: "cornflowerblue", transition: "0.3s"}} onClick={() => handleGoalClick(goal)}>{goal.name}</Name> :
-                                <Name onClick={() => handleGoalClick(goal)}>{goal.name}</Name>
-                            }
-                            <Action>
-                                <UpdateGoalButton goalID={goal.id}/>
-                                <DeleteGoalButton goalID={goal.id} goalName={goal.name}/>
-                            </Action>
-                        </GoalRow>
-                    ))}
+                    <GoalsList>
+                        {goalsList && [...goalsList].sort((a, b) => a.id - b.id).map((goal, index) => (
+                            <GoalRow key={`goal-number-${index}`}>
+                                {selectedGoal && selectedGoal.id === goal.id ?
+                                    <Name style={{color: "cornflowerblue", transition: "0.3s"}} onClick={() => handleGoalClick(goal)}>{goal.name}</Name> :
+                                    <Name onClick={() => handleGoalClick(goal)}>{goal.name}</Name>
+                                }
+                                <Action>
+                                    <UpdateGoalButton goalID={goal.id}/>
+                                    <DeleteGoalButton goalID={goal.id} goalName={goal.name}/>
+                                </Action>
+                            </GoalRow>
+                        ))}
+                    </GoalsList>
                 </>
             )}
         </GoalsContainer>
