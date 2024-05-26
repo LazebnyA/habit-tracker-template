@@ -30,6 +30,7 @@
       "react-app/jest"
     ]
   },
+  "proxy": "http://evolvefastapiservice:8000",
   "browserslist": {
     "production": [
       ">0.2%",

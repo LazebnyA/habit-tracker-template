@@ -1,24 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './News.css'
+import './News.css';
 import axios from "axios";
 
 const News = () => {
-    const [newsItems, setNewsItems] = useState(null)
+    const [newsItems, setNewsItems] = useState(null);
 
     const getNews = async () => {
         const response = await axios.get(`http://127.0.0.1:8000/news/get`, {
-          headers: {
-              'accept': 'application/json'
-          }
-        })
-        return response.data
-    }
+            headers: {
+                'accept': 'application/json'
+            }
+        });
+        return response.data;
+    };
 
     useEffect(() => {
         const fetchNews = async () => {
             const news = await getNews();
-            setNewsItems(news);
+            const sortedNews = news.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+            setNewsItems(sortedNews);
         };
 
         fetchNews();
@@ -52,7 +53,7 @@ const News = () => {
                         {newsItems && newsItems.map((item, index) => (
                             <div className="newsItem" key={index}>
                                 <h2>{item.title}</h2>
-                                <p className="date">{item.created_date}</p>
+                                <p className="date">{(new Date(item.created_date)).toLocaleDateString('en-US')}</p>
                                 <p>{item.content}</p>
                             </div>
                         ))}
