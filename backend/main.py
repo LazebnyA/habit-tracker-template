@@ -25,6 +25,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the FastAPI application!"}
+
 app.include_router(goals_router)
 app.include_router(user_router)
 app.include_router(habits_router)
