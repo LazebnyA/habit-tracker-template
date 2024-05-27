@@ -10,14 +10,6 @@ import 'react-responsive-modal/styles.css';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-module.exports = {
-  resolve: {
-    fallback: {
-      "path": require.resolve("path-browserify")
-    }
-  }
-};
-
 root.render(
   <React.StrictMode>
     <Provider store={store}>
