@@ -9,6 +9,7 @@ from routers.news_router import router as news_router
 app = FastAPI()
 
 origins = [
+    "https://habit-tracker-template.onrender.com"
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:3002",
