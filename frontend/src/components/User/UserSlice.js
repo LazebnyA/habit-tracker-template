@@ -11,7 +11,7 @@ const initUserState = {
 };
 
 export const registerUser = createAsyncThunk("user/register", async (userInfo, thunkAPI) => {
-    
+
     try {
         const { firstName, lastName, email, password, passwordConfirm } = userInfo;
         const url = `https://evolve-service.onrender.com/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;

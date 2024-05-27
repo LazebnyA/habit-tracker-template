@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './News.css';
 import axios from "axios";
 
-const baseUrl = process.env.SERVICE_BASE_URL;
+const baseUrl = "https://evolve-service.onrender.com";
 
 const News = () => {
     const [newsItems, setNewsItems] = useState(null);

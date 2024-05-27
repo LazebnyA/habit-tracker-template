@@ -1,7 +1,7 @@
 import {createAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const baseUrl = process.env.SERVICE_BASE_URL;
+const baseUrl = "https://evolve-service.onrender.com";
 
 
 export const fetchHabitsByGoal = createAsyncThunk(

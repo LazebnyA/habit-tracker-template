@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = process.env.SERVICE_BASE_URL;
+const baseUrl = "https://evolve-service.onrender.com";
 
 export const getHabit = async (habit_id) => {
     try {
