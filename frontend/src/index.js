@@ -10,6 +10,8 @@ import 'react-responsive-modal/styles.css';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
+require('dotenv').config();
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
