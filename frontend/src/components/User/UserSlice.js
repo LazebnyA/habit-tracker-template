@@ -21,7 +21,7 @@ export const registerUser = createAsyncThunk("user/register", async (userInfo, t
 
     try {
         const { firstName, lastName, email, password, passwordConfirm } = userInfo;
-        const url = `${baseUrl}/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
+        const url = `https://evolve-service.onrender.com/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
 
         const response = await axios.post(url, '', {
           headers: {
@@ -46,7 +46,7 @@ export const signinUser = createAsyncThunk("user/signin", async (userInfo, thunk
     }
 
     try {
-        const url = `${baseUrl}/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+        const url = `https://evolve-service.onrender.com/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
 
         const response = await axios.post(url, '', {
           headers: {
