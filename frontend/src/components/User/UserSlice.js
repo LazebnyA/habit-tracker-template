@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios";
 
-const baseUrl = process.env.SERVICE_BASE_URL;
-
 const userInfoString = localStorage.getItem("user_info");
 const currentUserInfo = userInfoString ? JSON.parse(userInfoString) : null
 
@@ -13,12 +11,7 @@ const initUserState = {
 };
 
 export const registerUser = createAsyncThunk("user/register", async (userInfo, thunkAPI) => {
-
-    const {loading, currentRequestID} = thunkAPI.getState().user.registerState
-    if (loading !== "pending" || thunkAPI.requestId !== currentRequestID) {
-        return
-    }
-
+    
     try {
         const { firstName, lastName, email, password, passwordConfirm } = userInfo;
         const url = `https://evolve-service.onrender.com/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
@@ -40,10 +33,6 @@ export const registerUser = createAsyncThunk("user/register", async (userInfo, t
 
 export const signinUser = createAsyncThunk("user/signin", async (userInfo, thunkAPI) => {
     const { email, password } = userInfo;
-    const {loading, currentRequestID} = thunkAPI.getState().user.signinState;
-    if (loading !== "pending" || thunkAPI.requestId !== currentRequestID) {
-        return
-    }
 
     try {
         const url = `https://evolve-service.onrender.com/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
