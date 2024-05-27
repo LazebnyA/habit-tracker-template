@@ -1,18 +1,21 @@
 import {createAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const baseUrl = process.env.SERVICE_BASE_URL;
+
+
 export const fetchHabitsByGoal = createAsyncThunk(
   'habits/fetchByGoal',
   async (payload, thunkAPI) => {
     try {
       const {selectedGoalID, selectedDate} = payload;
-      const habitsResponse = await axios.get(`http://127.0.0.1:8000/habits/get?id=${selectedGoalID}`, {
+      const habitsResponse = await axios.get(`${baseUrl}/habits/get?id=${selectedGoalID}`, {
               headers: {
                 'accept': 'application/json'
               }
             });
 
-      const checkedHabits = await axios.get(`http://127.0.0.1:8000/habits/trackInfo/${selectedGoalID}&${selectedDate}`, {
+      const checkedHabits = await axios.get(`${baseUrl}/habits/trackInfo/${selectedGoalID}&${selectedDate}`, {
               headers: {
                 'accept': 'application/json'
               }
@@ -33,7 +36,7 @@ export const addHabit = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const {goalID, habitName, currentDate} = payload;
-      const response = await axios.post(`http://127.0.0.1:8000/habits/create?id=${goalID}&name=${habitName}`,{
+      const response = await axios.post(`${baseUrl}/habits/create?id=${goalID}&name=${habitName}`,{
               headers: {
                 'accept': 'application/json'
               }
@@ -53,7 +56,7 @@ export const deleteHabit = createAsyncThunk('habits/deleteHabit',
     async(payload, thunkAPI) => {
         try {
           const {goalID, habitID, currentDate} = payload;
-          const response = await axios.delete(`http://127.0.0.1:8000/habits/delete/${habitID}`,{
+          const response = await axios.delete(`${baseUrl}/habits/delete/${habitID}`,{
                   headers: {
                     'accept': 'application/json'
                   }
@@ -73,7 +76,7 @@ export const redactHabit = createAsyncThunk('habits/redactHabit',
     async(payload, thunkAPI) => {
         try {
           const {goalID, habitID, currentDate, newHabitName} = payload;
-          const response = await axios.put(`http://127.0.0.1:8000/habits/update/${habitID}&${newHabitName}`,{
+          const response = await axios.put(`${baseUrl}/habits/update/${habitID}&${newHabitName}`,{
                   headers: {
                     'accept': 'application/json'
                   }
@@ -93,7 +96,7 @@ export const trackHabit = createAsyncThunk(
   'habits/trackHabit',
   async ({ habitID, date }, thunkAPI) => {
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/habits/track/${habitID}&${date}`);
+      const response = await axios.post(`${baseUrl}/habits/track/${habitID}&${date}`);
 
       return response.data;
     } catch (error) {
@@ -106,7 +109,7 @@ export const untrackHabit = createAsyncThunk(
   'habits/untrackHabit',
   async ({ habitID, date }, thunkAPI) => {
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/habits/untrack/${habitID}&${date}`);
+      const response = await axios.put(`${baseUrl}/habits/untrack/${habitID}&${date}`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -118,7 +121,7 @@ export const setCurrentDate = createAction('habits/setCurrentDate');
 export const fetchDataForSelectedHabit = createAsyncThunk("habits/fetchDates",
     async ({habitID}, thunkAPI) => {
         try {
-          const response = await axios.get(`http://127.0.0.1:8000/habits/trackDateInfo/${habitID}`);
+          const response = await axios.get(`${baseUrl}/habits/trackDateInfo/${habitID}`);
           return {habitID: habitID, habitDates: response.data};
         } catch (error) {
           return thunkAPI.rejectWithValue(error.response.data);

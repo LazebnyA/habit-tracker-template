@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios";
 
+const baseUrl = process.env.SERVICE_BASE_URL;
+
 const userInfoString = localStorage.getItem("user_info");
 const currentUserInfo = userInfoString ? JSON.parse(userInfoString) : null
 
@@ -19,7 +21,7 @@ export const registerUser = createAsyncThunk("user/register", async (userInfo, t
 
     try {
         const { firstName, lastName, email, password, passwordConfirm } = userInfo;
-        const url = `http://127.0.0.1:8000/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
+        const url = `${baseUrl}/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
 
         const response = await axios.post(url, '', {
           headers: {
@@ -44,7 +46,7 @@ export const signinUser = createAsyncThunk("user/signin", async (userInfo, thunk
     }
 
     try {
-        const url = `http://127.0.0.1:8000/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+        const url = `${baseUrl}/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
 
         const response = await axios.post(url, '', {
           headers: {

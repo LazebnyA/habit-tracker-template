@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const baseUrl = process.env.SERVICE_BASE_URL;
+
 export const getHabit = async (habit_id) => {
     try {
-        const habitsResponse = await axios.get(`http://127.0.0.1:8000/habits/get/${habit_id}`, {
+        const habitsResponse = await axios.get(`${baseUrl}/habits/get/${habit_id}`, {
               headers: {
                 'accept': 'application/json'
               }
