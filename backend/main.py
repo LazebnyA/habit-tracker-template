@@ -28,13 +28,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.mount("/", StaticFiles(directory="./frontend/build"), name="static")
-
-@app.get("/{path:path}", response_class=HTMLResponse)
-async def catch_all(path: str):
-    with open("./frontend/build", "r") as file:
-        return HTMLResponse(content=file.read(), status_code=200)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the FastAPI application!"}
