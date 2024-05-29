@@ -6,13 +6,13 @@ export const fetchHabitsByGoal = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const {selectedGoalID, selectedDate} = payload;
-      const habitsResponse = await axios.get(`http://127.0.0.1:8000/habits/get?id=${selectedGoalID}`, {
+      const habitsResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/habits/get?id=${selectedGoalID}`, {
               headers: {
                 'accept': 'application/json'
               }
             });
 
-      const checkedHabits = await axios.get(`http://127.0.0.1:8000/habits/trackInfo/${selectedGoalID}&${selectedDate}`, {
+      const checkedHabits = await axios.get(`${process.env.REACT_APP_SERVER_URL}/habits/trackInfo/${selectedGoalID}&${selectedDate}`, {
               headers: {
                 'accept': 'application/json'
               }
