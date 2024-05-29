@@ -6,7 +6,7 @@ export const getGoals = createAsyncThunk("goals/get", async (userInfo, thunkAPI)
 
     try {
         const { email } = userInfo;
-        const url = `http://127.0.0.1:8000/goals/get?email=${encodeURIComponent(email)}`;
+        const url = `${process.env.REACT_APP_SERVER_URL}/goals/get?email=${encodeURIComponent(email)}`;
 
         const response = await axios.get(url, {
           headers: {
