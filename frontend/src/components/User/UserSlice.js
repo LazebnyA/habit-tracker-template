@@ -12,14 +12,9 @@ const initUserState = {
 
 export const registerUser = createAsyncThunk("user/register", async (userInfo, thunkAPI) => {
 
-    const {loading, currentRequestID} = thunkAPI.getState().user.registerState
-    if (loading !== "pending" || thunkAPI.requestId !== currentRequestID) {
-        return
-    }
-
     try {
         const { firstName, lastName, email, password, passwordConfirm } = userInfo;
-        const url = `http://127.0.0.1:8000/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
+        const url = `https://evolve-service.onrender.com/user/register?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&passwordConfirm=${encodeURIComponent(passwordConfirm)}`;
 
         const response = await axios.post(url, '', {
           headers: {
@@ -38,13 +33,9 @@ export const registerUser = createAsyncThunk("user/register", async (userInfo, t
 
 export const signinUser = createAsyncThunk("user/signin", async (userInfo, thunkAPI) => {
     const { email, password } = userInfo;
-    const {loading, currentRequestID} = thunkAPI.getState().user.signinState;
-    if (loading !== "pending" || thunkAPI.requestId !== currentRequestID) {
-        return
-    }
 
     try {
-        const url = `http://127.0.0.1:8000/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+        const url = `https://evolve-service.onrender.com/user/signin?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
 
         const response = await axios.post(url, '', {
           headers: {

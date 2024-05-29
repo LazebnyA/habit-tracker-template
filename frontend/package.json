@@ -1,13 +1,14 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.5.2",
     "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "path-browserify": "^1.0.1",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",
     "react-dom": "^18.3.1",

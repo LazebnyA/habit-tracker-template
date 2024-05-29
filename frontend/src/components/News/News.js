@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import './News.css';
 import axios from "axios";
 
+const baseUrl = "https://evolve-service.onrender.com";
+
 const News = () => {
     const [newsItems, setNewsItems] = useState(null);
-
     const getNews = async () => {
-        const response = await axios.get(`http://127.0.0.1:8000/news/get`, {
+        const response = await axios.get(`${baseUrl}/news/get`, {
             headers: {
                 'accept': 'application/json'
             }

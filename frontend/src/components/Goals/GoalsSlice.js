@@ -1,12 +1,14 @@
 import axios from "axios";
 import {createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+const baseUrl = "https://evolve-service.onrender.com";
+
 export const getGoals = createAsyncThunk("goals/get", async (userInfo, thunkAPI) => {
     // call the api for get /goals
 
     try {
         const { email } = userInfo;
-        const url = `http://127.0.0.1:8000/goals/get?email=${encodeURIComponent(email)}`;
+        const url = `${baseUrl}/goals/get?email=${encodeURIComponent(email)}`;
 
         const response = await axios.get(url, {
           headers: {
@@ -31,7 +33,7 @@ export const createGoal = createAsyncThunk("goals/create", async (payload, thunk
         let response;
 
         if (!goalID) {
-            const url = `http://127.0.0.1:8000/goals/create?email=${encodeURIComponent(email)}&name=${encodeURIComponent(goalName)}`;
+            const url = `${baseUrl}/goals/create?email=${encodeURIComponent(email)}&name=${encodeURIComponent(goalName)}`;
 
             response = await axios.post(url, '', {
               headers: {
@@ -39,7 +41,7 @@ export const createGoal = createAsyncThunk("goals/create", async (payload, thunk
               }
             });
         } else {
-            const url = `http://127.0.0.1:8000/goals/update?id=${encodeURIComponent(goalID)}&name=${encodeURIComponent(goalName)}`;
+            const url = `${baseUrl}/goals/update?id=${encodeURIComponent(goalID)}&name=${encodeURIComponent(goalName)}`;
 
             response = await axios.put(url, '', {
               headers: {
@@ -64,7 +66,7 @@ export const deleteGoal = createAsyncThunk("goals/delete", async (payload, thunk
     try {
         const { goalID } = payload;
 
-        const url = `http://127.0.0.1:8000/goals/delete?id=${encodeURIComponent(goalID)}`;
+        const url = `${baseUrl}/goals/delete?id=${encodeURIComponent(goalID)}`;
         const response = await axios.delete(url, {
             headers: {
                 'accept': 'application/json'

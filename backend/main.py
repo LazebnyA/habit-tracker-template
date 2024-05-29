@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.requests import Request
+from starlette.responses import HTMLResponse
+from starlette.staticfiles import StaticFiles
 
 from routers.habits_router import router as habits_router
 from routers.goals_router import router as goals_router
@@ -9,6 +12,7 @@ from routers.news_router import router as news_router
 app = FastAPI()
 
 origins = [
+    "https://habit-tracker-template.onrender.com",
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:3002",
@@ -25,10 +29,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount("/", StaticFiles(directory="./frontend/build"), name="static")
 
+@app.get("/{path:path}", response_class=HTMLResponse)
+async def catch_all(path: str):
+    with open("./frontend/build", "r") as file:
+        return HTMLResponse(content=file.read(), status_code=200)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the FastAPI application!"}
+
 
 app.include_router(goals_router)
 app.include_router(user_router)
