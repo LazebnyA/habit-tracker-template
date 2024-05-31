@@ -25,27 +25,47 @@ class UserNotFoundException(Exception):
 
 class UserRepository:
     @classmethod
+    async def verify_email(cls, email: str) -> bool:
+        async with new_session() as session:
+            query = select(User).filter(User.email == email)
+            result = await session.execute(query)
+            user = result.scalars().one_or_none()
+
+            return bool(user)
+
+
+    @classmethod
     async def add_user(cls, data: UserRegScheme):
         async with new_session() as session:
-            user_dict = data.model_dump()
-            user_dict.popitem()
+            if not UserRepository.verify_email(data.email):
+                user_dict = data.model_dump()
 
-            user = User(**user_dict)
+                user_dict.popitem()
 
-            user_dict.popitem()
+                user = User(**user_dict)
 
-            session.add(user)
+                user_dict.popitem()
 
-            await session.flush()
-            await session.commit()
+                session.add(user)
 
-            user_info = {
-                "firstName": user_dict["firstName"],
-                "lastName": user_dict["lastName"],
-                "email": user_dict["email"]
-            }
+                await session.flush()
+                await session.commit()
 
-            return user_info
+                user_info = {
+                    "firstName": user_dict["firstName"],
+                    "lastName": user_dict["lastName"],
+                    "email": user_dict["email"]
+                }
+
+                return user_info
+            else:
+                raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                                    detail="User with the provided email already exists")
+
+
+
+
+
 
     @classmethod
     async def verify_account(cls, data: UserSignInScheme):

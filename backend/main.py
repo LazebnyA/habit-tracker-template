@@ -1,8 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.requests import Request
-from starlette.responses import HTMLResponse
-from starlette.staticfiles import StaticFiles
 
 from routers.habits_router import router as habits_router
 from routers.goals_router import router as goals_router
