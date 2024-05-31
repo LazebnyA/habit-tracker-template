@@ -10,7 +10,7 @@ class Goal(BaseModel):
 class UserRegScheme(BaseModel):
     firstName: str = Field(..., min_length=1)
     lastName: str = Field(..., min_length=1)
-    email: EmailStr | None = Field(default=None)
+    email: EmailStr = Field(min_length=1)
     password: str = Field(..., min_length=5)
     passwordConfirm: str = Field(..., min_length=5)
 
@@ -24,7 +24,7 @@ class UserRegScheme(BaseModel):
 
 
 class UserSignInScheme(BaseModel):
-    email: EmailStr | None = Field(default=None, min_length=1)
+    email: EmailStr = Field(min_length=1)
     password: str = Field(..., min_length=5)
 
 
