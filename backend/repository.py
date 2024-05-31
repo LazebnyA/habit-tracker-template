@@ -37,7 +37,7 @@ class UserRepository:
     @classmethod
     async def add_user(cls, data: UserRegScheme):
         async with new_session() as session:
-            if not UserRepository.verify_email(data.email):
+            if not await UserRepository.verify_email(data.email):
                 user_dict = data.model_dump()
 
                 user_dict.popitem()
@@ -61,11 +61,6 @@ class UserRepository:
             else:
                 raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                                     detail="User with the provided email already exists")
-
-
-
-
-
 
     @classmethod
     async def verify_account(cls, data: UserSignInScheme):
