@@ -98,8 +98,10 @@ const Register = () => {
     });
 
     const userState = useSelector(state => state.user)
+    const [passwordMatch, setPasswordMatch] = useState(false)
     const {error} = userState.registerState
     const {loggedInUser} = userState
+
 
     const lastNameRef = useRef(null);
     const emailRef = useRef(null);
@@ -127,7 +129,9 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(userInfo);
+        if (userInfo.password !== userInfo.passwordConfirm) {
+            setPasswordMatch(true)
+        }
         dispatch(registerUser(userInfo));
     };
 
@@ -175,8 +179,8 @@ const Register = () => {
                     </InputSection>
                     <InputSection>
                         <label htmlFor="passwordConfirm">Confirm Password</label>
-                        {error && error.detail && error.detail.find(err => err.msg === "Value error, passwords do not match" || err.loc[1] === "passwordConfirm") && (
-                            <ErrorSection>{error.detail.find(err => err.msg === "Value error, passwords do not match" || err.loc[1] === "passwordConfirm").msg}</ErrorSection>) }
+                        {passwordMatch && (
+                            <ErrorSection>Passwords do not match!</ErrorSection>) }
                         <input type={"password"} ref={confPassRef} id={"passwordConfirm"}
                                onChange={handleUserInfoChange} placeholder={"Confirm Password"} maxLength={128}/>
                     </InputSection>
