@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, Self
 from pydantic import BaseModel, EmailStr, Field, model_validator
 
@@ -35,6 +36,13 @@ class UserOrmScheme(BaseModel):
     password: str
 
 
+class GoalDatabaseModel(BaseModel):
+    id: int
+    name: str
+    created_date: datetime
+    user_id: int
+
+
 class UserEmail(BaseModel):
     email: EmailStr
 
@@ -55,3 +63,5 @@ class NewsScheme(BaseModel):
     user_id: int
     title: str
     content: str
+
+

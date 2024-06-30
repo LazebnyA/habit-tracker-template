@@ -1,34 +1,53 @@
-from typing import Annotated, List
+from fastapi import Depends, APIRouter, HTTPException
 
-from fastapi import Depends, APIRouter
-
-from src.repository import UserRepository, GoalRepository
-from src.schemas import Goal, UserRegScheme, UserSignInScheme, UserOrmScheme, GoalOrmScheme, UserEmail, GoalID
+from src.repository import GoalRepository
+from src.schemas import GoalOrmScheme, UserEmail, GoalID, GoalDatabaseModel
 
 router = APIRouter(
     prefix="/goals",
     tags=["Goals"]
 )
 
-@router.get("/get")
-async def get_goals(user: Annotated[UserEmail, Depends()]):
-    goals_list = await GoalRepository.get_goals(user)
-    return goals_list
+
+@router.get("/get", response_model=list[GoalDatabaseModel])
+async def get_goals(
+        user: UserEmail = Depends()
+):
+    try:
+        goals_list = await GoalRepository.get_goals(user)
+        return goals_list
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/create")
-async def add_goal(user: Annotated[UserEmail, Depends()], goal: Annotated[GoalOrmScheme, Depends()]):
-    goal_to_add = await GoalRepository.add_goal(user, goal)
-    return goal_to_add
+async def add_goal(
+        user: UserEmail = Depends(),
+        goal: GoalOrmScheme = Depends()
+):
+    try:
+        goal_to_add = await GoalRepository.add_goal(user, goal)
+        return goal_to_add
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.put("/update")
-async def update_goal(goalID: Annotated[GoalID, Depends()],
-                      newGoalName: Annotated[GoalOrmScheme, Depends()]):
-    response = await GoalRepository.update_goal(goalID, newGoalName)
-    return response
+async def update_goal(
+        goal_id: GoalID = Depends(),
+        new_goal_name: GoalOrmScheme = Depends()
+):
+    try:
+        response = await GoalRepository.update_goal(goal_id, new_goal_name)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.delete("/delete")
-async def delete_goal(goalID: Annotated[GoalID, Depends()]):
-    response = await GoalRepository.delete_goal(goalID)
-    return response
+async def delete_goal(goal_id: GoalID = Depends()):
+    try:
+        response = await GoalRepository.delete_goal(goal_id)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
