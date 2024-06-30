@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from src.repository import NewsRepository
-from src.schemas import NewsScheme
+from src.schemas import NewsScheme, NewsDatabaseModel
 
 router = APIRouter(
     prefix="/news",
@@ -10,7 +10,7 @@ router = APIRouter(
 
 
 @router.get("/get")
-async def get_posts():
+async def get_posts() -> list[NewsDatabaseModel]:
     return await NewsRepository.get_news()
 
 @router.post("/create")

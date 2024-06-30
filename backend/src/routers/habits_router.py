@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Depends, APIRouter
 
 from src.repository import HabitsRepository, HabitTrackRepository
-from src.schemas import GoalID, HabitName
+from src.schemas import GoalID, HabitName, HabitDatabaseModel
 
 router = APIRouter(
     prefix="/habits",
@@ -11,13 +11,13 @@ router = APIRouter(
 )
 
 
-@router.get("/get")
-async def get_habits(goal_id: GoalID = Depends()):
-    habits_list = await HabitsRepository.get_habits(goal_id)
+@router.get("/get", response_model=list[HabitDatabaseModel])
+async def get_habits(goal_id: Annotated[GoalID, Depends()]):
+    habits_list = await HabitsRepository.get_habits(goal_id.id)
     return habits_list
 
 
-@router.get("/get/{habit_id}")
+@router.get("/get/{habit_id}", response_model=HabitDatabaseModel)
 async def get_habit(habit_id: int):
     habits_list = await HabitsRepository.get_habit(habit_id)
     return habits_list
@@ -57,7 +57,7 @@ async def untrack_habit(habit_id: int, date: str):
     return response
 
 
-@router.get("/trackInfo/{goal_id}&{date}")
+@router.get("/trackInfo/{goal_id}&{date}", response_model=list[int])
 async def get_trackInfo(goal_id: int, date: str):
     parsed_date = date[:10]
     response = await HabitTrackRepository.get_habits_by_date(goal_id, parsed_date)
@@ -65,8 +65,8 @@ async def get_trackInfo(goal_id: int, date: str):
     return response
 
 
-@router.get("/trackDateInfo/{habit_id}")
-async def get_trackInfo(habit_id: int):
+@router.get("/trackDateInfo/{habit_id}", response_model=list[str])
+async def get_dates_by_habit(habit_id: int):
     response = await HabitTrackRepository.get_dates_by_habit(habit_id)
 
     return response

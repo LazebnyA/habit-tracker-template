@@ -13,11 +13,8 @@ router = APIRouter(
 async def get_goals(
         user: UserEmail = Depends()
 ):
-    try:
-        goals_list = await GoalRepository.get_goals(user)
-        return goals_list
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    goals_list = await GoalRepository.get_goals(user)
+    return goals_list
 
 
 @router.post("/create")
@@ -25,11 +22,8 @@ async def add_goal(
         user: UserEmail = Depends(),
         goal: GoalOrmScheme = Depends()
 ):
-    try:
-        goal_to_add = await GoalRepository.add_goal(user, goal)
-        return goal_to_add
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    goal_to_add = await GoalRepository.add_goal(user, goal)
+    return goal_to_add
 
 
 @router.put("/update")

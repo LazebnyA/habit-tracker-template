@@ -1,6 +1,3 @@
-from datetime import datetime
-from typing import List
-
 from fastapi import HTTPException
 from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
@@ -10,7 +7,8 @@ from starlette import status
 from src.config import DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
 from src.models.database import User, Goal, Habit, HabitTrack, NewsPost
 
-from src.schemas import UserRegScheme, UserOrmScheme, UserSignInScheme, GoalOrmScheme, UserEmail, GoalID, NewsScheme
+from src.schemas import UserRegScheme, UserOrmScheme, UserSignInScheme, GoalOrmScheme, UserEmail, GoalID, NewsScheme, \
+    GoalDatabaseModel, HabitDatabaseModel, HabitDateModel, NewsDatabaseModel
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -86,17 +84,20 @@ class UserRepository:
 
 class GoalRepository:
     @classmethod
-    async def get_goals(cls, user: UserEmail):
+    async def get_goals(cls, user: UserEmail) -> list[GoalDatabaseModel]:
         async with new_session() as session:
-            fetch_id = select(User.id).where(user.email == User.email)
+            fetch_id = select(User.id).where(User.email == user.email)
             result = await session.execute(fetch_id)
             user_id = result.scalars().one_or_none()
+
+            if user_id is None:
+                return []
 
             goals_query = select(Goal).where(Goal.userID == user_id)
             result = await session.execute(goals_query)
             goal_models = result.scalars().all()
 
-            return goal_models
+            return [GoalDatabaseModel.model_validate(goal) for goal in goal_models]
 
     @classmethod
     async def add_goal(cls, user_data: UserEmail, goal_data: GoalOrmScheme):
@@ -139,22 +140,22 @@ class GoalRepository:
 
 class HabitsRepository:
     @classmethod
-    async def get_habits(cls, goal_id: GoalID):
+    async def get_habits(cls, goal_id: int) -> list[HabitDatabaseModel]:
         async with new_session() as session:
-            fetch_habits = select(Habit).where(goal_id.id == Habit.goalID)
+            fetch_habits = select(Habit).where(goal_id == Habit.goalID)
             result = await session.execute(fetch_habits)
             habits = result.scalars().all()
 
-            return habits
+            return [HabitDatabaseModel.model_validate(habit) for habit in habits]
 
     @classmethod
-    async def get_habit(cls, habit_id: int):
+    async def get_habit(cls, habit_id: int) -> HabitDatabaseModel:
         async with new_session() as session:
             fetch_habits = select(Habit).where(Habit.id == habit_id)
             result = await session.execute(fetch_habits)
-            habits = result.scalars().one_or_none()
+            habit = result.scalars().one_or_none()
 
-            return habits
+            return HabitDatabaseModel.model_validate(habit)
 
     @classmethod
     async def add_habit(cls, goal_id: GoalID, habit_name: str):
@@ -235,7 +236,7 @@ class HabitTrackRepository:
             return result
 
     @classmethod
-    async def get_habits_by_date(cls, goal_id: int, date: str):
+    async def get_habits_by_date(cls, goal_id: int, date: str) -> list[int]:
         async with new_session() as session:
             stmt = (
                 select(Habit.id)
@@ -257,7 +258,7 @@ class HabitTrackRepository:
             return habits_ids
 
     @classmethod
-    async def get_dates_by_habit(cls, habit_id: int):
+    async def get_dates_by_habit(cls, habit_id: int) -> list[str]:
         async with new_session() as session:
             stmt = (
                 select(HabitTrack.date)
@@ -268,13 +269,13 @@ class HabitTrackRepository:
             )
             result = await session.execute(stmt)
 
-            habits_ids = result.scalars().all()
+            habit_dates = result.scalars().all()
 
             # goals_query = select(Goal).where(Goal.userID == user_id)
             # result = await session.execute(goals_query)
             # goal_models = result.scalars().all()
-            #
-            return habits_ids
+
+            return habit_dates
 
 
 class NewsRepository:
@@ -291,10 +292,10 @@ class NewsRepository:
             return post
 
     @classmethod
-    async def get_news(cls):
+    async def get_news(cls) -> list[NewsDatabaseModel]:
         async with new_session() as session:
             fetch_posts = select(NewsPost)
             result = await session.execute(fetch_posts)
             response = result.scalars().all()
 
-            return response
+            return [NewsDatabaseModel.model_validate(news_item) for news_item in response]

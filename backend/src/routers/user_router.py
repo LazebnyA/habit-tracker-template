@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Depends, APIRouter
 
 from src.repository import UserRepository
-from src.schemas import Goal, UserRegScheme, UserSignInScheme
+from src.schemas import UserRegScheme, UserSignInScheme
 
 router = APIRouter(
     prefix="",
